@@ -1,11 +1,18 @@
 #include<stdio.h>
 #include<stdlib.h>
+//Define colors.
+#define KNRM  "\x1B[40;0m"
+#define KRED  "\x1B[41;1m"
+#define KGRN  "\x1B[42;1m"
+#define KYEL  "\x1B[43;1m"
+#define KBLU  "\x1B[44;1m"
+#define KMAG  "\x1B[45;1m"
+#define KCYN  "\x1B[46;1m"
+#define KWHT  "\x1B[47;1;30m"
 
-int i,j,k;
 char t1,t2,t3;
-char f[3][3]={'o','o','o','o','o','o','o','o','o'},r[3][3]={'g','g','g','g','g','g','g','b','g'},l[3][3]={'b','b','b','b','b','b','b','g','b'},t[3][3]={'y','y','y','y','y','y','y','y','y'},b[3][3]={'r','r','r','r','r','r','r','r','r'},d[3][3]={'w','w','w','w','w','w','w','w','w'};
-
-//char f[3][3]={'a','b','c','d','e','f','g','h','i'},r[3][3]={'q','w','e','r','t','y','u','i','o'},l[3][3]={'a','s','d','f','g','h','j','k','l'},t[3][3]={'z','x','c','v','b','n','m','q','w'},b[3][3]={'r','f','h','r','c','b','n','w','g'},d[3][3]={'q','r','e','w','i','s','j','j','r'};
+int topflag=0,topflag2=0;
+char f[3][3]={'o','o','y','o','o','y','o','o','y'},r[3][3]={'g','g','g','g','g','g','g','g','g'},l[3][3]={'b','b','b','b','b','b','b','b','b'},t[3][3]={'y','y','r','y','y','r','y','y','r'},b[3][3]={'w','r','r','w','r','r','w','r','r'},d[3][3]={'o','w','w','o','w','w','o','w','w'};
 
 //Pointer arrays which contain addresses of elements that are needed for corresponding functions.
 char *right1[8]={&f[0][0],&r[0][0],&b[0][0],&l[0][0],&f[2][0],&r[2][0],&b[2][0],&l[2][0]};
@@ -17,13 +24,14 @@ char *lsa[12]={&f[0][0],&t[0][0],&b[2][2],&d[2][2],&f[1][0],&t[1][0],&b[1][2],&d
 char *horizon[7]={&f[1][1],&r[1][1],&b[1][1],&l[1][1],&f[1][1],&r[1][1],&b[1][1]};
 char *facec[12]={&t[2][0],&r[0][0],&d[2][0],&l[2][2],&t[2][1],&r[1][0],&d[2][1],&l[1][2],&t[2][2],&r[2][0],&d[2][2],&l[0][2]};
 char *facea[12]={&t[2][0],&l[2][2],&d[2][0],&r[0][0],&t[2][1],&l[1][2],&d[2][1],&r[1][0],&t[2][2],&l[0][2],&d[2][2],&r[2][0]};
-char *backc[12]={&t[0][2],&l[0][0],&d[0][2],&r[2][2],&t[0][1],&l[1][0],&d[0][1],&r[1][2],&t[0][0],&l[2][0],&d[0][2],&r[0][2]};
-char *backa[12]={&t[0][2],&r[2][2],&d[0][2],&l[0][0],&t[0][1],&r[1][2],&d[0][1],&l[1][0],&t[0][0],&r[0][2],&d[0][2],&l[2][0]};
+char *backc[12]={&t[0][2],&l[0][0],&d[0][2],&r[2][2],&t[0][1],&l[1][0],&d[0][1],&r[1][2],&t[0][0],&l[2][0],&d[0][0],&r[0][2]};
+char *backa[12]={&t[0][2],&r[2][2],&d[0][2],&l[0][0],&t[0][1],&r[1][2],&d[0][1],&l[1][0],&t[0][0],&r[0][2],&d[0][0],&l[2][0]};
 char *cube[6]={&f[0][0],&r[0][0],&b[0][0],&l[0][0],&t[0][0],&d[0][0]};
+
 
 //Display all elements.
 void display()
-{
+{	int i,k;
 	char *m;
 	m=*(cube);
 	//here, k:number of faces
@@ -41,12 +49,21 @@ void display()
 		else if(k==4)
 			printf("Top:\n");
 		else if(k==5)
-			printf("Down:\n");
-
-		
+			printf("Down:\n");	
 		for(i=0;i<9;i++)
-		{
-			printf("%c ",m[i]);
+		{	
+			if(m[i]=='w')
+				printf(KWHT "%c " KNRM,m[i]);
+			else if(m[i]=='r')
+				printf(KRED "%c " KNRM,m[i]);	
+			else if(m[i]=='b')
+				printf(KBLU "%c " KNRM,m[i]);	
+			else if(m[i]=='g')
+				printf(KGRN "%c " KNRM,m[i]);
+			else if(m[i]=='y')
+				printf(KYEL "%c " KNRM,m[i]);
+			else 
+				printf(KMAG "%c " KNRM,m[i]);
 		if(i%3==2)
 			printf("\n");
 		}
@@ -57,7 +74,7 @@ void display()
 //Rotate horizontally towards right(either first or third row)
 void right(int row)
 {
-	int pos,flag=0;
+	int i,j,pos,flag=0;
 	char *x,t1,temp1[3],temp2[3];
 	if(row==1)
 	{	
@@ -117,10 +134,10 @@ void right(int row)
 	}
 }
 
-//Rotate horizontally towards right(either first or third row)
+//Rotate horizontally towards left(either first or third row)
 void left(int row)
 {
-	int pos,flag=0;
+	int i,j,pos,flag=0;
 	char *x,temp1[3],temp2[3];
 	if(row==1)
 	{	
@@ -184,10 +201,11 @@ void left(int row)
 //Rotate right face 
 void rside(char ch)
 {
+	int i,j;
 	char temp1,temp2,*x,**y;
 	if(ch=='c'||ch=='C')
 	{
-		y=&(rs);
+		y=&(rs[0]);
 		//Rotate right face in cloclwise direction
 		temp1=r[0][0];
 		r[0][0]=r[2][0];
@@ -202,7 +220,7 @@ void rside(char ch)
 	}
 	else
 	{
-		y=&(rsa);
+		y=&(rsa[0]);
 		//Rotate right face in anti clockwise direction
 		temp1=r[0][0];
 		r[0][0]=r[0][2];
@@ -236,10 +254,11 @@ void rside(char ch)
 //Rotate left face
 void lside(char ch)
 {
+	int i,j;
 	char temp1,temp2,*x,**y;
 	if(ch=='c'||ch=='C')
 	{
-		y=&(ls);
+		y=&(ls[0]);
 		//Rotate left face in clockwise direction
 		temp1=l[0][0];
 		l[0][0]=l[2][0];
@@ -254,7 +273,7 @@ void lside(char ch)
 	}
 	else
 	{
-		y=&(lsa);
+		y=&(lsa[0]);
 		//Rotate left face in anti clockwise direction
 		temp1=l[0][0];
 		l[0][0]=l[0][2];
@@ -291,7 +310,8 @@ void face(char ch)
 	char temp1,temp2,*x,**y;
 	if(ch=='c'||ch=='C')
 	{
-		y=&(facec);
+		y=&(facec[0]);
+		//Shift elements of front face in clockwise direction.
 		temp1=f[0][0];
 		f[0][0]=f[2][0];
 		f[2][0]=f[2][2];
@@ -305,7 +325,8 @@ void face(char ch)
 	}
 	else
 	{
-		y=&(facea);
+		y=&(facea[0]);
+		//Shift elements of front face in anti clockwise direction.
 		temp1=f[0][0];
 		f[0][0]=f[0][2];
 		f[0][2]=f[2][2];
@@ -338,10 +359,12 @@ void face(char ch)
 //Rotate back face		
 void back(char ch)
 {
+	int i,j;
 	char temp1,temp2,*x,**y;
 	if(ch=='c'||ch=='C')
 	{
-		y=&(backc);
+		y=&(backc[0]);
+		//Shift elements of front back in clockwise direction.
 		temp1=b[0][0];
 		b[0][0]=b[2][0];
 		b[2][0]=b[2][2];
@@ -355,7 +378,8 @@ void back(char ch)
 	}
 	else
 	{
-		y=&(backa);
+		y=&(backa[0]);
+		//Shift elements of back face in anti clockwise direction.
 		temp1=b[0][0];
 		b[0][0]=b[0][2];
 		b[0][2]=b[2][2];
@@ -384,7 +408,7 @@ void back(char ch)
 		x[0]=temp1;
 	}
 }		
-//Function to bring all middle white elements to its respective position.(Forms a "Plus" shape in d bottom(white) face.
+//Function to bring all middle white elements to its respective position.(Forms a "Plus" shape in d bottom(white) face.)
 void oneplus()
 {
 	int i,j;
@@ -478,7 +502,7 @@ void oneplus()
 		lside('c');
 		lside('c');
 	}
-	
+	//Check for 'w' in bottom layer  of vertical faces.
 	if(f[2][1]=='w')
 	{
 		face('a');
@@ -504,16 +528,18 @@ void oneplus()
 		lside('c');
 	}
 	
-	//check for 'w' in bottom face and bring it to its respective position.
+	//check for 'w' in middle positions of bottom face and bring it to its respective position.
 	label:{
 	 if(d[0][1]=='w'&&b[2][1]!=b[1][1])
 	{
 		color=b[2][1];
+		//Bring the element to the top.
 		back('c');
 		back('c');
 		j=2;
 		i=2;
 		x=*(horizon+i);
+		//Find its matching face
 		while(x[0]!=color)
 		{
 			right(1);
@@ -521,10 +547,8 @@ void oneplus()
 			if(i==j+4)
 				break;
 			x=*(horizon+i);
-			printf("\n%d\n",i);
-			display();
-			printf("\n\n");
 		}
+		//Bring it down.
 		if(i==j+1)
 		{
 			lside('c');
@@ -540,9 +564,6 @@ void oneplus()
 			rside('c');
 			rside('c');
 		}
-		printf("\n\n");
-		display();
-		printf("\n\n");
 	}
 	else if(d[1][0]=='w'&&r[2][1]!=r[1][1])
 	{
@@ -643,17 +664,441 @@ void oneplus()
 	}
 	if(d[0][1]!='w'||d[1][0]!='w'||d[2][1]!='w'||d[1][2]!='w')
 	{
-		printf("adgadg");
 		oneplus();
 	}
 	}
 }
-
+//Function to bring all corner pieces containing white to the top layer
+void bringtotop()
+{
+	if(d[0][0]=='w'||b[2][0]=='w'||r[2][2]=='w')
+	{
+		rside('a');
+		right(1);
+		rside('c');
+	}
+	if(d[0][2]=='w'||l[2][0]=='w'||b[2][2]=='w')
+	{
+		back('a');
+		right(1);
+		back('c'); 
+	}
+	if(d[2][0]=='w'||r[2][0]=='w'||f[2][2]=='w')
+	{
+		rside('c');
+		right(1);
+		rside('a');
+	}
+	if(d[2][2]=='w'||l[2][2]=='w'||f[2][0]=='w')
+	{
+		lside('a');
+		right(1);
+		lside('c');
+	}
+	if((t[0][0]=='w'||b[0][2]=='w'||l[0][0]=='w')&&(t[0][2]=='w'||b[0][0]=='w'||r[0][2]=='w')&&(t[2][0]=='w'||f[0][0]=='w'||l[0][2]=='w')&&(t[2][2]=='w'||f[0][2]=='w'||r[0][0]=='w'))
+		return;
+	else
+		bringtotop();
 	
+}
+	
+//Function to bring all corner white pieces to respective positions in bottom layer.
+void bringtobot()
+{
+	int i;
+	for(i=1;i<=4;i++)
+	{	
+		if((f[0][0]==f[1][1]&&l[0][2]==l[1][1]&&t[2][0]=='w')||(t[2][0]==f[1][1]&&f[0][0]==l[1][1]&&l[0][2]=='w')||(l[0][2]==f[1][1]&&t[2][0]==l[1][1]&&f[0][0]=='w')||(f[0][0]==l[1][1]&&l[0][2]==f[1][1]&&t[2][0]=='w')||(t[2][0]==l[1][1]&&f[0][0]==f[1][1]&&l[0][2]=='w')||(l[0][2]==l[1][1]&&t[2][0]==f[1][1]&&f[0][0]=='w'))
+		{
+			right(1);
+			lside('a');
+			left(1);
+			lside('c');
+			break;
+		}
+		right(1);
+	}
+	for(i=1;i<=4;i++)
+	{	
+		if((f[0][2]==f[1][1]&&r[0][0]==r[1][1]&&t[2][2]=='w')||(r[0][0]==f[1][1]&&t[2][2]==r[1][1]&&f[0][2]=='w')||(t[2][2]==f[1][1]&&f[0][2]==r[1][1]&&r[0][0]=='w')||(f[0][2]==r[1][1]&&r[0][0]==f[1][1]&&t[2][2]=='w')||(r[0][0]==r[1][1]&&t[2][2]==f[1][1]&&f[0][2]=='w')||(t[2][2]==r[1][1]&&f[0][2]==f[1][1]&&r[0][0]=='w'))
+		{
+			left(1);
+			rside('c');
+			right(1);
+			rside('a');
+			break;
+		}
+		right(1);
+	}
+	for(i=1;i<=4;i++)
+	{
+		if((r[0][2]==r[1][1]&&b[0][0]==b[1][1]&&t[0][2]=='w')||(b[0][0]==r[1][1]&&t[0][2]==b[1][1]&&r[0][2]=='w')||(t[0][2]==r[1][1]&&r[0][2]==b[1][1]&&b[0][0]=='w')||(r[0][2]==b[1][1]&&b[0][0]==r[1][1]&&t[0][2]=='w')||(b[0][0]==b[1][1]&&t[0][2]==r[1][1]&&r[0][2]=='w')||(t[0][2]==b[1][1]&&r[0][2]==r[1][1]&&b[0][0]=='w'))
+		{
+			left(1);
+			back('c');
+			right(1);
+			back('a');
+			break;
+		}
+		right(1);
+	}
+	for(i=1;i<=4;i++)
+	{
+		if((b[0][2]==b[1][1]&&l[0][0]==l[1][1]&&t[0][0]=='w')||(l[0][0]==b[1][1]&&t[0][0]==l[1][1]&&b[0][2]=='w')||(t[0][0]==b[1][1]&&b[0][2]==l[1][1]&&l[0][0]=='w')||(b[0][2]==l[1][1]&&l[0][0]==b[1][1]&&t[0][0]=='w')||(l[0][0]==l[1][1]&&t[0][0]==b[1][1]&&b[0][2]=='w')||(t[0][0]==l[1][1]&&b[0][2]==b[1][1]&&l[0][0]=='w'))
+		{
+ 			right(1);
+			back('a');
+			left(1);
+			back('c');
+			break;
+		}
+		right(1);
+	}
+}
+
+//Rotate the corner pieces of bottom layer in its own position to complete bottom layer.
+void complete_bot_layer()
+{
+	while(d[2][2]!='w')
+	{
+		lside('a');
+		right(1);
+		lside('c');
+		left(1);
+	}
+	right(3);
+	if(d[2][2]!='w')
+		complete_bot_layer();
+	else if(d[0][0]=='w'&&d[0][2]=='w'&&d[2][0]=='w'&&d[2][2]=='w')
+	{
+		while(f[2][1]!=f[1][1])
+		{	right(3);}
+		return;
+	}
+	else
+	{
+		right(3);
+		complete_bot_layer();
+	}
+}	
+
+//Turn the whole cube towards left.
+void turnmain()
+{	
+	int flag=0,i,j;
+	char *x,temp1[9],temp2[9];
+	for(i=0;i<4;i++)	
+	{	
+		x=*(left1+i);
+		for(j=0;j<9;j++)
+		{	
+			if(flag==0)
+			{	
+				temp1[j]=x[j];
+				temp2[j]=x[j];
+				continue;
+			}
+			else
+			{
+				temp1[j]=x[j];
+				x[j]=temp2[j];
+				temp2[j]=temp1[j];
+			}
+		}
+		flag=1;	
+	}	
+	x=*(left1);
+	for(j=0;j<9;j++)
+	{
+		x[j]=temp1[j];
+	}
+	//Shift elements of top face.
+	t1=t[0][0];
+	t[0][0]=t[2][0];
+	t[2][0]=t[2][2];
+	t[2][2]=t[0][2];
+	t[0][2]=t1;
+	t1=t[0][1];
+	t[0][1]=t[1][0];
+	t[1][0]=t[2][1];
+	t[2][1]=t[1][2];
+	t[1][2]=t1;		
+	//Shift elements of bottom face.
+	t1=d[0][0];
+	d[0][0]=d[0][2];
+	d[0][2]=d[2][2];
+	d[2][2]=d[2][0];
+	d[2][0]=t1;
+	t1=d[0][1];
+	d[0][1]=d[1][2];
+	d[1][2]=d[2][1];
+	d[2][1]=d[1][0];
+	d[1][0]=t1;	
+}
+
+//Formula to bring pieces in the middle layer to the top layer.
+void midtotop(char ch)
+{
+	if(ch=='l')
+	{
+		lside('a');
+		right(1);
+		lside('c');
+		left(1);
+		face('c');
+		left(1);
+		face('a');
+	}
+	else 
+	{
+		rside('c');
+		left(1);
+		rside('a');
+		right(1);
+		face('a');
+		right(1);
+		face('c');
+	}
+}
+//Formula to bring pieces in top layer to middle layer.
+void toptomid(char ch)
+{
+	if(ch=='r')
+	{
+		face('c');
+		left(1);
+		face('c');
+		left(1);
+		face('c');
+		right(1);
+		face('a');
+		right(1);
+		face('a');
+	}	
+	else
+	{
+		face('a');
+		right(1);
+		face('a');
+		right(1);
+		face('a');
+		left(1);
+		face('c');
+		left(1);
+		face('c');
+	}
+}
+
+//Solve middle layer.
+void middle()
+{
+	int i;
+	if(f[1][0]!=f[1][1]&&l[1][2]!=l[1][1]&&f[1][0]!='y'&&l[1][2]!='y')
+		midtotop('l');
+	else if(f[1][2]!=f[1][1]&&r[1][0]!=r[1][1]&&f[1][2]!='y'&&r[1][0]!='y')
+		midtotop('r');
+	for(i=0;i<4;i++)
+	{	
+		if(f[0][1]==f[1][1]&&t[2][1]==r[1][1])
+		{
+			toptomid('r');
+		}
+		else if(f[0][1]==f[1][1]&&t[2][1]==l[1][1])
+		{
+			toptomid('l');
+		}
+		right(1);
+	}
+	turnmain();
+	if(f[1][1]!=f[1][0]||f[1][1]!=f[1][2]||r[1][1]!=r[1][0]||r[1][1]!=r[1][2]||b[1][1]!=b[1][0]||b[1][1]!=b[1][2]||l[1][1]!=l[1][0]||l[1][1]!=l[1][2])
+		middle();
+}
+//Formula-1 for top face.
+void topplusform1()
+{
+		face('c');
+		rside('c');
+		left(1);
+		rside('a');
+		right(1);
+		face('a');
+}
+//Formula-2 for top face.
+void topplusform2()
+{
+	rside('c');
+	left(1);
+	rside('a');
+	left(1);
+	rside('c');
+	left(1);
+	left(1);
+	rside('a');
+}
+
+//Create plus shape in the top face.
+void topplus()
+{	while(1)
+	{
+		if((t[0][1]==t[1][1]&&t[1][0]==t[1][1])||(t[0][1]==t[1][1]&&t[1][2]==t[1][1])||(t[1][2]==t[1][1]&&t[2][1]==t[1][1])||(t[2][1]==t[1][1]&&t[1][0]==t[1][1]))
+			break;
+		topplusform1();
+	}
+	while(1)
+	{
+		right(1);
+		if(t[0][1]==t[1][1]&&t[1][0]==t[1][1])
+			break;
+	}
+	topplusform1();	
+	if(t[1][0]!=t[1][1]&&t[1][2]!=t[1][1])
+		right(1);
+	topplusform1();
+	topflag=0;	
+}
+
+//Match middle edge pieces of top face.
+void topplusmatch()
+{
+	if((b[0][1]==b[1][1]&&r[0][1]==r[1][1])||(r[0][1]==r[1][1]&&l[0][1]==l[1][1]))
+		topplusform2();
+	if((r[0][1]==r[1][1]&&f[0][1]==f[1][1])||(f[0][1]==f[1][1]&&b[0][1]==b[1][1]))
+	{
+		turnmain();
+		turnmain();
+		turnmain();
+		topplusform2();
+	}
+	if((f[0][1]==f[1][1]&&l[0][1]==l[1][1]))
+	{
+		turnmain();
+		turnmain();
+		topplusform2();
+	}
+	if((l[0][1]==l[1][1]&&b[0][1]==b[1][1]))
+	{
+		turnmain();
+		topplusform2();
+	}
+	right(1);
+	if(f[0][1]==f[1][1]&&r[0][1]==r[1][1]&&b[0][1]==b[1][1]&&l[0][1]==l[1][1])
+		return;
+	else
+		topplusmatch();
+}
+
+//Formula to bring corner pieces of top face to position.
+void topcornerform()
+{
+	rside('c');
+	right(1);
+	lside('a');
+	left(1);
+	rside('a');
+	right(1);
+	lside('c');
+	left(1);
+	if(topflag2==1)
+	{
+		if((f[0][2]==f[1][1]&&r[0][0]==r[1][1]&&t[2][2]=='y')||(r[0][0]==f[1][1]&&t[2][2]==r[1][1]&&f[0][2]=='y')||(t[2][2]==f[1][1]&&f[0][2]==r[1][1]&&r[0][0]=='y')||(f[0][2]==r[1][1]&&r[0][0]==f[1][1]&&t[2][2]=='y')||(r[0][0]==r[1][1]&&t[2][2]==f[1][1]&&f[0][2]=='y')||(t[2][2]==r[1][1]&&f[0][2]==f[1][1]&&r[0][0]=='y'))
+		{
+			return;
+		}
+		else
+			topcornerform();
+		
+	}
+}
+
+//Bring corner pieces of top face to position.
+void topcorner()
+{
+	if((f[0][0]==f[1][1]&&l[0][2]==l[1][1]&&t[2][0]=='y')||(t[2][0]==f[1][1]&&f[0][0]==l[1][1]&&l[0][2]=='y')||(l[0][2]==f[1][1]&&t[2][0]==l[1][1]&&f[0][0]=='y')||(f[0][0]==l[1][1]&&l[0][2]==f[1][1]&&t[2][0]=='y')||(t[2][0]==l[1][1]&&f[0][0]==f[1][1]&&l[0][2]=='y')||(l[0][2]==l[1][1]&&t[2][0]==f[1][1]&&f[0][0]=='y'))
+	{
+		topcornerform();
+		
+		return;
+		
+	}
+	if((f[0][2]==f[1][1]&&r[0][0]==r[1][1]&&t[2][2]=='y')||(r[0][0]==f[1][1]&&t[2][2]==r[1][1]&&f[0][2]=='y')||(t[2][2]==f[1][1]&&f[0][2]==r[1][1]&&r[0][0]=='y')||(f[0][2]==r[1][1]&&r[0][0]==f[1][1]&&t[2][2]=='y')||(r[0][0]==r[1][1]&&t[2][2]==f[1][1]&&f[0][2]=='y')||(t[2][2]==r[1][1]&&f[0][2]==f[1][1]&&r[0][0]=='y'))
+	{
+		turnmain();
+		topflag2=1;
+		topcornerform();
+		return;
+	}
+	if((r[0][2]==r[1][1]&&b[0][0]==b[1][1]&&t[0][2]=='y')||(b[0][0]==r[1][1]&&t[0][2]==b[1][1]&&r[0][2]=='y')||(t[0][2]==r[1][1]&&r[0][2]==b[1][1]&&b[0][0]=='y')||(r[0][2]==b[1][1]&&b[0][0]==r[1][1]&&t[0][2]=='y')||(b[0][0]==b[1][1]&&t[0][2]==r[1][1]&&r[0][2]=='y')||(t[0][2]==b[1][1]&&r[0][2]==r[1][1]&&b[0][0]=='y'))
+	{
+		turnmain();
+		turnmain();
+		topflag2=1;
+		topcornerform();
+		return;
+	}
+	if((b[0][2]==b[1][1]&&l[0][0]==l[1][1]&&t[0][0]=='y')||(l[0][0]==b[1][1]&&t[0][0]==l[1][1]&&b[0][2]=='y')||(t[0][0]==b[1][1]&&b[0][2]==l[1][1]&&l[0][0]=='y')||(b[0][2]==l[1][1]&&l[0][0]==b[1][1]&&t[0][0]=='y')||(l[0][0]==l[1][1]&&t[0][0]==b[1][1]&&b[0][2]=='y')||(t[0][0]==l[1][1]&&b[0][2]==b[1][1]&&l[0][0]=='y'))
+	{	turnmain();
+		turnmain();
+		turnmain();
+		topflag2=1;
+		topcornerform();
+		return;
+	}
+	topcornerform();
+	topcorner();
+}
+
+//Rotate corner pieces in top face in its own position to obtain solved cube.
+void topfinal()
+{
+	while(t[2][2]!='y')
+	{
+		rside('a');
+		left(3);
+		rside('c');
+		right(3);
+	}
+	if(t[0][0]!='y'||t[0][2]!='y'||t[2][0]!='y')
+	{
+		left(1);
+		topfinal();
+	}
+	else
+	{
+		while(f[0][1]!=f[1][1])
+			left(1);
+		return;
+	}
+}
+
 void main()
 {
+	printf("Initial\n");
 	display();
+	printf("oneplus\n\n");	
 	oneplus();
-	printf("\n\n");
+	display();
+	bringtotop();
+	printf("bringtotop\n\n");
+	display();
+	bringtobot();
+	printf("bringtobottom\n\n");
+	display();
+	complete_bot_layer();
+	printf("cbl\n\n");
+	display();
+	middle();
+	printf("middle\n\n");
+	display();
+	topplus();
+	printf("topplus\n\n");
+	display();
+	topplusmatch();
+	printf("topplusmatch\n\n");
+	display();
+	topcorner();
+	printf("topcorner\n\n");
+	display();
+	topfinal();
+	printf("topfinal\n\n");
 	display();
 }
